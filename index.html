@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EduTrack — Student Management System (DSA + Python)</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0b0f1a;
+    --card: rgba(255,255,255,0.04);
+  }
+  *{ font-family:'Inter', sans-serif; }
+  code, pre, .mono { font-family:'JetBrains Mono', monospace; }
+  body{
+    background: radial-gradient(1200px 600px at 10% -10%, rgba(99,102,241,0.25), transparent 60%),
+                radial-gradient(1000px 500px at 100% 0%, rgba(236,72,153,0.18), transparent 55%),
+                #0b0f1a;
+    color: #e5e7eb;
+    min-height:100vh;
+  }
+  .glass{
+    background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.02));
+    border:1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(14px);
+  }
+  .grad-text{
+    background: linear-gradient(90deg,#818cf8,#f472b6,#38bdf8);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .btn-primary{
+    background: linear-gradient(90deg,#6366f1,#ec4899);
+    transition: all .25s ease;
+  }
+  .btn-primary:hover{ filter:brightness(1.12); transform:translateY(-1px); box-shadow:0 10px 25px -8px rgba(236,72,153,0.5); }
+  .btn-ghost{
+    background: rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.1);
+    transition:.2s;
+  }
+  .btn-ghost:hover{ background:rgba(255,255,255,0.12); }
+  ::-webkit-scrollbar{ height:8px; width:8px; }
+  ::-webkit-scrollbar-thumb{ background:rgba(255,255,255,0.18); border-radius:10px; }
+  ::-webkit-scrollbar-track{ background:transparent; }
+
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+  .fade-up{ animation: fadeUp .6s ease both; }
+  .d1{animation-delay:.05s} .d2{animation-delay:.12s} .d3{animation-delay:.2s} .d4{animation-delay:.28s}
+
+  .node-box{
+    min-width:150px;
+    background: linear-gradient(160deg, rgba(99,102,241,0.18), rgba(236,72,153,0.1));
+    border:1px solid rgba(148,163,255,0.35);
+    border-radius:12px;
+    padding:10px 12px;
+    flex-shrink:0;
+  }
+  .arrow{ color:#818cf8; font-size:20px; flex-shrink:0; }
+
+  .tbl-row{ transition: background .3s ease; }
+  .tbl-row.flash{ background: rgba(236,72,153,0.18) !important; }
+
+  .tab-btn.active{
+    background: linear-gradient(90deg,#6366f1,#ec4899);
+    color:#fff;
+  }
+
+  .bucket-chip{
+    background: rgba(56,189,248,0.15);
+    border:1px solid rgba(56,189,248,0.4);
+  }
+
+  input, select{
+    background: rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.12);
+    color:#f1f5f9;
+  }
+  input:focus, select:focus{
+    outline:none; border-color:#818cf8; box-shadow:0 0 0 3px rgba(129,140,248,0.25);
+  }
+  input::placeholder{ color:#64748b; }
+
+  .cgpa-bar-bg{ background: rgba(255,255,255,0.08); }
+
+  code[class*="language-"], pre[class*="language-"]{
+    background: #0f1322 !important;
+  }
+</style>
+</head>
+<body class="pb-20">
+
+<!-- NAV -->
+<nav class="sticky top-0 z-50 glass border-b border-white/5">
+  <div class="max-w-7xl mx-auto px-5 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-pink-500 flex items-center justify-center font-bold">E</div>
+      <span class="font-bold text-lg tracking-tight">EduTrack <span class="text-slate-400 font-medium hidden sm:inline">· SMS</span></span>
+    </div>
+    <div class="hidden md:flex items-center gap-6 text-sm text-slate-300">
+      <a href="#dashboard" class="hover:text-white transition">Dashboard</a>
+      <a href="#structures" class="hover:text-white transition">Data Structures</a>
+      <a href="#pycode" class="hover:text-white transition">Python Code</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-xs px-2.5 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">● Live Demo</span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="max-w-7xl mx-auto px-5 pt-14 pb-10 text-center fade-up">
+  <p class="uppercase tracking-[0.25em] text-xs text-indigo-300 mb-3">Data Structures & Algorithms Project</p>
+  <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4">
+    Student Management System <br class="hidden sm:block"> built with <span class="grad-text">DSA + Python</span>
+  </h1>
+  <p class="text-slate-400 max-w-2xl mx-auto">
+    A fully interactive demo powered by a Linked List, Hash Table, Binary Search Tree, Stack & Queue —
+    with the complete Python source code included below.
+  </p>
+</header>
+
+<!-- STATS -->
+<section class="max-w-7xl mx-auto px-5 grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+  <div class="glass rounded-2xl p-5 fade-up d1">
+    <p class="text-slate-400 text-xs mb-1">Total Students</p>
+    <p id="statTotal" class="text-3xl font-bold">0</p>
+  </div>
+  <div class="glass rounded-2xl p-5 fade-up d2">
+    <p class="text-slate-400 text-xs mb-1">Departments</p>
+    <p id="statDept" class="text-3xl font-bold">0</p>
+  </div>
+  <div class="glass rounded-2xl p-5 fade-up d3">
+    <p class="text-slate-400 text-xs mb-1">Avg CGPA</p>
+    <p id="statCgpa" class="text-3xl font-bold">0.0</p>
+  </div>
+  <div class="glass rounded-2xl p-5 fade-up d4">
+    <p class="text-slate-400 text-xs mb-1">Operations Run</p>
+    <p id="statOps" class="text-3xl font-bold">0</p>
+  </div>
+</section>
+
+<!-- DASHBOARD -->
+<main id="dashboard" class="max-w-7xl mx-auto px-5 grid lg:grid-cols-[360px_1fr] gap-6">
+
+  <!-- LEFT PANEL -->
+  <div class="space-y-6">
+
+    <!-- Add Student -->
+    <div class="glass rounded-2xl p-5 fade-up">
+      <h3 class="font-semibold mb-4 flex items-center gap-2"><span>➕</span> Add Student <span class="text-xs text-slate-500 font-normal ml-auto">Linked List.append()</span></h3>
+      <form id="studentForm" class="space-y-3">
+        <div class="grid grid-cols-2 gap-3">
+          <input required type="number" id="fRoll" placeholder="Roll No." class="rounded-lg px-3 py-2 text-sm col-span-1">
+          <select id="fYear" class="rounded-lg px-3 py-2 text-sm col-span-1">
+            <option value="1">Year 1</option><option value="2">Year 2</option>
+            <option value="3" selected>Year 3</option><option value="4">Year 4</option>
+          </select>
+        </div>
+        <input required id="fName" placeholder="Full Name" class="w-full rounded-lg px-3 py-2 text-sm">
+        <div class="grid grid-cols-2 gap-3">
+          <select id="fDept" class="rounded-lg px-3 py-2 text-sm">
+            <option>CSE</option><option>ECE</option><option>ME</option><option>CIVIL</option><option>EEE</option>
+          </select>
+          <input required type="number" step="0.1" min="0" max="10" id="fCgpa" placeholder="CGPA" class="rounded-lg px-3 py-2 text-sm">
+        </div>
+        <input type="email" id="fEmail" placeholder="Email (optional)" class="w-full rounded-lg px-3 py-2 text-sm">
+        <p id="formError" class="text-xs text-rose-400 hidden"></p>
+        <button type="submit" class="btn-primary w-full py-2.5 rounded-lg text-sm font-semibold">Add Student</button>
+      </form>
+    </div>
+
+    <!-- Search -->
+    <div class="glass rounded-2xl p-5 fade-up">
+      <h3 class="font-semibold mb-4 flex items-center gap-2"><span>🔎</span> Search & Filter</h3>
+      <div class="space-y-3">
+        <div class="flex gap-2">
+          <input id="searchRoll" type="number" placeholder="Search by Roll (O(1))" class="flex-1 rounded-lg px-3 py-2 text-sm">
+          <button id="btnSearchRoll" class="btn-ghost px-3 rounded-lg text-sm">Go</button>
+        </div>
+        <input id="searchName" placeholder="Filter by name (linear scan)" class="w-full rounded-lg px-3 py-2 text-sm">
+        <select id="filterDept" class="w-full rounded-lg px-3 py-2 text-sm">
+          <option value="">All Departments</option>
+          <option>CSE</option><option>ECE</option><option>ME</option><option>CIVIL</option><option>EEE</option>
+        </select>
+        <p id="searchMsg" class="text-xs text-indigo-300 min-h-[1rem]"></p>
+      </div>
+    </div>
+
+    <!-- Sort / Algorithms -->
+    <div class="glass rounded-2xl p-5 fade-up">
+      <h3 class="font-semibold mb-4 flex items-center gap-2"><span>⚙️</span> Sorting Algorithms</h3>
+      <div class="grid grid-cols-1 gap-2 text-sm">
+        <button data-sort="roll" class="sortBtn btn-ghost px-3 py-2 rounded-lg text-left">Sort by Roll <span class="text-slate-400 float-right">BST Inorder</span></button>
+        <button data-sort="cgpa" class="sortBtn btn-ghost px-3 py-2 rounded-lg text-left">Sort by CGPA ↓ <span class="text-slate-400 float-right">Quick Sort</span></button>
+        <button data-sort="name" class="sortBtn btn-ghost px-3 py-2 rounded-lg text-left">Sort by Name A-Z <span class="text-slate-400 float-right">Merge Sort</span></button>
+      </div>
+      <button id="btnUndo" class="w-full mt-3 py-2 rounded-lg text-sm btn-ghost">↩️ Undo Last Action <span class="text-slate-400">(Stack.pop)</span></button>
+    </div>
+
+    <!-- Activity Queue -->
+    <div class="glass rounded-2xl p-5 fade-up">
+      <h3 class="font-semibold mb-3 flex items-center gap-2"><span>📜</span> Activity Log <span class="text-xs text-slate-500 font-normal ml-auto">Queue (FIFO)</span></h3>
+      <ul id="activityLog" class="space-y-2 text-xs text-slate-300 max-h-48 overflow-y-auto pr-1"></ul>
+    </div>
+
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="space-y-6">
+
+    <!-- Table -->
+    <div class="glass rounded-2xl p-5 fade-up overflow-hidden">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-semibold flex items-center gap-2"><span>🎓</span> Student Records</h3>
+        <span id="countBadge" class="text-xs px-2 py-1 rounded-full bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">0 records</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="text-left text-slate-400 border-b border-white/10">
+              <th class="py-2 pr-3">Roll</th>
+              <th class="py-2 pr-3">Name</th>
+              <th class="py-2 pr-3">Dept</th>
+              <th class="py-2 pr-3">Year</th>
+              <th class="py-2 pr-3">CGPA</th>
+              <th class="py-2 pr-3"></th>
+            </tr>
+          </thead>
+          <tbody id="studentTableBody"></tbody>
+        </table>
+      </div>
+      <p id="emptyMsg" class="text-center text-slate-500 text-sm py-8 hidden">No students match your filters.</p>
+    </div>
+
+    <!-- Structure Visualizers -->
+    <div id="structures" class="glass rounded-2xl p-5 fade-up">
+      <h3 class="font-semibold mb-3 flex items-center gap-2"><span>🔗</span> Linked List Visualizer</h3>
+      <div id="linkedListViz" class="flex items-center gap-2 overflow-x-auto pb-2 text-xs"></div>
+    </div>
+
+    <div class="glass rounded-2xl p-5 fade-up">
+      <h3 class="font-semibold mb-3 flex items-center gap-2"><span>🗂️</span> Hash Table Buckets <span class="text-xs text-slate-500 font-normal ml-auto">key = roll % 10</span></h3>
+      <div id="hashTableViz" class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs"></div>
+    </div>
+
+  </div>
+</main>
+
+<!-- PYTHON CODE -->
+<section id="pycode" class="max-w-7xl mx-auto px-5 mt-14">
+  <div class="text-center mb-8 fade-up">
+    <p class="uppercase tracking-[0.25em] text-xs text-pink-300 mb-3">Source Code</p>
+    <h2 class="text-3xl font-extrabold">The Python Implementation</h2>
+    <p class="text-slate-400 mt-2">Every structure above is backed by real Python — Linked List, Hash Table, BST, Stack & Queue.</p>
+  </div>
+
+  <div class="glass rounded-2xl p-4 sm:p-5 fade-up">
+    <div class="flex flex-wrap items-center gap-2 mb-4">
+      <button class="tab-btn active btn-ghost px-3 py-1.5 rounded-lg text-xs" data-tab="linked_list">linked_list.py</button>
+      <button class="tab-btn btn-ghost px-3 py-1.5 rounded-lg text-xs" data-tab="hash_table">hash_table.py</button>
+      <button class="tab-btn btn-ghost px-3 py-1.5 rounded-lg text-xs" data-tab="bst">bst.py</button>
+      <button class="tab-btn btn-ghost px-3 py-1.5 rounded-lg text-xs" data-tab="stack_queue">stack_queue.py</button>
+      <button class="tab-btn btn-ghost px-3 py-1.5 rounded-lg text-xs" data-tab="main">main.py</button>
+      <div class="ml-auto flex gap-2">
+        <button id="btnCopy" class="btn-ghost px-3 py-1.5 rounded-lg text-xs">📋 Copy</button>
+        <button id="btnDownload" class="btn-primary px-3 py-1.5 rounded-lg text-xs font-semibold">⬇ Download .py</button>
+      </div>
+    </div>
+    <div class="rounded-xl overflow-hidden border border-white/10">
+      <pre class="!m-0 max-h-[520px] overflow-auto text-xs sm:text-sm"><code id="codeBlock" class="language-python"></code></pre>
+    </div>
+  </div>
+</section>
+
+<footer class="max-w-7xl mx-auto px-5 mt-16 pt-8 border-t border-white/10 text-center text-slate-500 text-sm">
+  Built for learning Data Structures & Algorithms · Linked List · Hash Table · BST · Stack · Queue
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism-core.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+
+<script>
+/* ======================== DSA CORE (JavaScript) ======================== */
+
+class LLNode{ constructor(data){ this.data=data; this.next=null; } }
+class LinkedList{
+  constructor(){ this.head=null; this.size=0; }
+  append(data){
+    const node = new LLNode(data);
+    if(!this.head){ this.head = node; } else {
+      let cur = this.head;
+      while(cur.next) cur = cur.next;
+      cur.next = node;
+    }
+    this.size++;
+  }
+  toArray(){
+    const arr=[]; let cur=this.head;
+    while(cur){ arr.push(cur.data); cur=cur.next; }
+    return arr;
+  }
+}
+
+class HashTable{
+  constructor(capacity=10){ this.capacity=capacity; this.buckets=Array.from({length:capacity},()=>[]); }
+  hash(key){ return key % this.capacity; }
+  set(key,value){
+    const idx=this.hash(key); const bucket=this.buckets[idx];
+    const found = bucket.find(p=>p.key===key);
+    if(found) found.value=value; else bucket.push({key,value});
+  }
+  get(key){
+    const idx=this.hash(key); const found=this.buckets[idx].find(p=>p.key===key);
+    return found ? found.value : null;
+  }
+}
+
+class BSTNode{ constructor(val,data){ this.val=val; this.data=data; this.left=null; this.right=null; } }
+class BST{
+  constructor(){ this.root=null; }
+  insert(val,data){ this.root=this._insert(this.root,val,data); }
+  _insert(node,val,data){
+    if(!node) return new BSTNode(val,data);
+    if(val<node.val) node.left=this._insert(node.left,val,data);
+    else if(val>node.val) node.right=this._insert(node.right,val,data);
+    else node.data=data;
+    return node;
+  }
+  inorder(){ const out=[]; this._in(this.root,out); return out; }
+  _in(node,out){ if(!node) return; this._in(node.left,out); out.push(node.val); this._in(node.right,out); }
+}
+
+class Stack{
+  constructor(){ this.items=[]; }
+  push(x){ this.items.push(x); }
+  pop(){ return this.items.pop(); }
+  isEmpty(){ return this.items.length===0; }
+}
+
+class Queue{
+  constructor(max=30){ this.items=[]; this.max=max; }
+  enqueue(x){ this.items.push(x); if(this.items.length>this.max) this.items.shift(); }
+  recent(n=8){ return this.items.slice(-n).reverse(); }
+}
+
+/* Sorting algorithms */
+function quickSort(arr,cmp){
+  if(arr.length<=1) return arr;
+  const pivot=arr[Math.floor(arr.length/2)];
+  const left=arr.filter((x,i)=> i!==Math.floor(arr.length/2) && cmp(x,pivot)<0);
+  const right=arr.filter((x,i)=> i!==Math.floor(arr.length/2) && cmp(x,pivot)>=0);
+  return [...quickSort(left,cmp), pivot, ...quickSort(right,cmp)];
+}
+function mergeSort(arr,cmp){
+  if(arr.length<=1) return arr;
+  const mid=Math.floor(arr.length/2);
+  const left=mergeSort(arr.slice(0,mid),cmp);
+  const right=mergeSort(arr.slice(mid),cmp);
+  const res=[]; let i=0,j=0;
+  while(i<left.length && j<right.length){ res.push(cmp(left[i],right[j])<=0 ? left[i++] : right[j++]); }
+  return [...res, ...left.slice(i), ...right.slice(j)];
+}
+
+/* ======================== APP STATE ======================== */
+let students = [
+  {roll:101,name:"Aarav Sharma",dept:"CSE",year:3,cgpa:9.1,email:"aarav@edu.in"},
+  {roll:102,name:"Diya Patel",dept:"ECE",year:2,cgpa:8.4,email:"diya@edu.in"},
+  {roll:103,name:"Vihaan Reddy",dept:"ME",year:4,cgpa:7.8,email:"vihaan@edu.in"},
+  {roll:104,name:"Ananya Iyer",dept:"CSE",year:1,cgpa:8.9,email:"ananya@edu.in"},
+  {roll:105,name:"Kabir Singh",dept:"CIVIL",year:3,cgpa:7.2,email:"kabir@edu.in"},
+  {roll:106,name:"Ishita Nair",dept:"ECE",year:2,cgpa:9.4,email:"ishita@edu.in"},
+];
+
+let ll = new LinkedList();
+let ht = new HashTable(10);
+let bst = new BST();
+const undoStack = new Stack();
+const activityQueue = new Queue();
+let opsCount = 0;
+let highlightRoll = null;
+
+const deptColor = {
+  CSE:"bg-blue-500/15 text-blue-300 border-blue-500/30",
+  ECE:"bg-purple-500/15 text-purple-300 border-purple-500/30",
+  ME:"bg-orange-500/15 text-orange-300 border-orange-500/30",
+  CIVIL:"bg-emerald-500/15 text-emerald-300 border-emerald-500/30",
+  EEE:"bg-amber-500/15 text-amber-300 border-amber-500/30",
+};
+
+function rebuildAll(){
+  ll = new LinkedList();
+  ht = new HashTable(10);
+  bst = new BST();
+  students.forEach(s=>{
+    ll.append(s);
+    ht.set(s.roll, s);
+    bst.insert(s.roll, s);
+  });
+}
+rebuildAll();
+
+/* ======================== RENDER ======================== */
+function currentFilters(){
+  const nameQ = document.getElementById('searchName').value.trim().toLowerCase();
+  const deptQ = document.getElementById('filterDept').value;
+  return {nameQ, deptQ};
+}
+
+function renderTable(){
+  const {nameQ, deptQ} = currentFilters();
+  let list = ll.toArray().filter(s=>{
+    const matchName = !nameQ || s.name.toLowerCase().includes(nameQ);
+    const matchDept = !deptQ || s.dept===deptQ;
+    return matchName && matchDept;
+  });
+
+  const tbody = document.getElementById('studentTableBody');
+  const emptyMsg = document.getElementById('emptyMsg');
+  document.getElementById('countBadge').textContent = `${list.length} record${list.length!==1?'s':''}`;
+
+  if(list.length===0){ tbody.innerHTML=''; emptyMsg.classList.remove('hidden'); return; }
+  emptyMsg.classList.add('hidden');
+
+  tbody.innerHTML = list.map(s=>{
+    const badge = deptColor[s.dept] || "bg-slate-500/15 text-slate-300 border-slate-500/30";
+    const flash = highlightRoll===s.roll ? 'flash' : '';
+    return `
+    <tr class="tbl-row border-b border-white/5 ${flash}" data-roll="${s.roll}">
+      <td class="py-2.5 pr-3 font-mono text-slate-300">#${s.roll}</td>
+      <td class="py-2.5 pr-3 font-medium">${s.name}</td>
+      <td class="py-2.5 pr-3"><span class="text-xs px-2 py-0.5 rounded-full border ${badge}">${s.dept}</span></td>
+      <td class="py-2.5 pr-3 text-slate-400">Y${s.year}</td>
+      <td class="py-2.5 pr-3 w-32">
+        <div class="flex items-center gap-2">
+          <div class="flex-1 h-1.5 rounded-full cgpa-bar-bg overflow-hidden">
+            <div class="h-full rounded-full bg-gradient-to-r from-indigo-400 to-pink-400" style="width:${s.cgpa*10}%"></div>
+          </div>
+          <span class="text-xs text-slate-300">${s.cgpa.toFixed(1)}</span>
+        </div>
+      </td>
+      <td class="py-2.5 pr-1 text-right">
+        <button class="delBtn text-rose-400 hover:text-rose-300 text-xs" data-roll="${s.roll}">Delete</button>
+      </td>
+    </tr>`;
+  }).join('');
+
+  tbody.querySelectorAll('.delBtn').forEach(btn=>{
+    btn.addEventListener('click', ()=> deleteStudent(parseInt(btn.dataset.roll)));
+  });
+
+  if(highlightRoll!==null){
+    setTimeout(()=>{ highlightRoll=null; renderTable(); }, 1600);
+  }
+}
+
+function renderLinkedListViz(){
+  const arr = ll.toArray();
+  const box = document.getElementById('linkedListViz');
+  if(arr.length===0){ box.innerHTML = '<span class="text-slate-500 text-sm">List is empty</span>'; return; }
+  box.innerHTML = arr.map((s,i)=>{
+    const sep = i < arr.length-1 ? `<span class="arrow">➜</span>` : '';
+    return `<div class="node-box"><p class="font-semibold text-slate-200">#${s.roll}</p><p class="text-slate-400">${s.name}</p></div>${sep}`;
+  }).join('') + `<span class="arrow">➜</span><div class="node-box text-center text-slate-500">NULL</div>`;
+}
+
+function renderHashTableViz(){
+  const box = document.getElementById('hashTableViz');
+  box.innerHTML = ht.buckets.map((bucket,i)=>{
+    const chips = bucket.length ? bucket.map(p=>`<span class="bucket-chip rounded px-1.5 py-0.5 inline-block mt-1">#${p.key}</span>`).join(' ') : `<span class="text-slate-600">empty</span>`;
+    return `<div class="rounded-lg border border-white/10 p-2 bg-white/5"><p class="text-slate-400 mb-1">Bucket ${i}</p>${chips}</div>`;
+  }).join('');
+}
+
+function renderActivity(){
+  const ul = document.getElementById('activityLog');
+  const items = activityQueue.recent(10);
+  ul.innerHTML = items.length ? items.map(t=>`<li class="border-l-2 border-indigo-500/60 pl-2">${t}</li>`).join('') : `<li class="text-slate-500">No activity yet</li>`;
+}
+
+function renderStats(){
+  document.getElementById('statTotal').textContent = students.length;
+  document.getElementById('statDept').textContent = new Set(students.map(s=>s.dept)).size;
+  const avg = students.length ? (students.reduce((a,s)=>a+s.cgpa,0)/students.length).toFixed(2) : '0.0';
+  document.getElementById('statCgpa').textContent = avg;
+  document.getElementById('statOps').textContent = opsCount;
+}
+
+function renderAll(){
+  renderTable();
+  renderLinkedListViz();
+  renderHashTableViz();
+  renderActivity();
+  renderStats();
+}
+
+/* ======================== ACTIONS ======================== */
+function addStudent(data){
+  if(ht.get(data.roll)){
+    showFormError(`Roll number ${data.roll} already exists.`);
+    return false;
+  }
+  students.push(data);
+  rebuildAll();
+  undoStack.push({type:'add', roll:data.roll});
+  activityQueue.enqueue(`➕ Added <b>${data.name}</b> (Roll ${data.roll})`);
+  opsCount++;
+  renderAll();
+  return true;
+}
+
+function deleteStudent(roll, silent){
+  const idx = students.findIndex(s=>s.roll===roll);
+  if(idx===-1) return;
+  const removed = students[idx];
+  students.splice(idx,1);
+  rebuildAll();
+  if(!silent){
+    undoStack.push({type:'delete', student:removed, index:idx});
+    activityQueue.enqueue(`🗑️ Deleted <b>${removed.name}</b> (Roll ${roll})`);
+    opsCount++;
+  }
+  renderAll();
+}
+
+function undoLast(){
+  const action = undoStack.pop();
+  if(!action){ activityQueue.enqueue('⚠️ Nothing to undo'); renderActivity(); return; }
+  if(action.type==='add'){
+    const idx = students.findIndex(s=>s.roll===action.roll);
+    if(idx>-1) students.splice(idx,1);
+    activityQueue.enqueue(`↩️ Undo: removed roll ${action.roll}`);
+  } else if(action.type==='delete'){
+    const pos = Math.min(action.index, students.length);
+    students.splice(pos,0,action.student);
+    activityQueue.enqueue(`↩️ Undo: restored <b>${action.student.name}</b>`);
+  }
+  rebuildAll();
+  opsCount++;
+  renderAll();
+}
+
+function showFormError(msg){
+  const el = document.getElementById('formError');
+  el.textContent = msg; el.classList.remove('hidden');
+  setTimeout(()=>el.classList.add('hidden'), 3000);
+}
+
+/* ======================== EVENTS ======================== */
+document.getElementById('studentForm').addEventListener('submit', e=>{
+  e.preventDefault();
+  const data = {
+    roll: parseInt(document.getElementById('fRoll').value),
+    name: document.getElementById('fName').value.trim(),
+    dept: document.getElementById('fDept').value,
+    year: parseInt(document.getElementById('fYear').value),
+    cgpa: parseFloat(document.getElementById('fCgpa').value),
+    email: document.getElementById('fEmail').value.trim()
+  };
+  if(!data.name || isNaN(data.roll) || isNaN(data.cgpa)){ showFormError('Please fill all required fields.'); return; }
+  if(addStudent(data)) e.target.reset();
+});
+
+document.getElementById('btnSearchRoll').addEventListener('click', ()=>{
+  const val = parseInt(document.getElementById('searchRoll').value);
+  const msg = document.getElementById('searchMsg');
+  if(isNaN(val)){ msg.textContent='Enter a roll number.'; return; }
+  const found = ht.get(val);
+  if(found){
+    highlightRoll = val;
+    msg.textContent = `✅ Found "${found.name}" instantly via Hash Table (bucket ${val%10}).`;
+    document.getElementById('searchName').value=''; document.getElementById('filterDept').value='';
+    renderTable();
+  } else {
+    msg.textContent = `❌ No student with roll ${val}.`;
+  }
+  opsCount++; renderStats();
+});
+
+document.getElementById('searchName').addEventListener('input', renderTable);
+document.getElementById('filterDept').addEventListener('change', renderTable);
+
+document.querySelectorAll('.sortBtn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const mode = btn.dataset.sort;
+    if(mode==='roll'){
+      const map = new Map(students.map(s=>[s.roll,s]));
+      const sortedRolls = bst.inorder();
+      students = sortedRolls.map(r=>map.get(r));
+      activityQueue.enqueue('🔽 Sorted by Roll using BST Inorder Traversal');
+    } else if(mode==='cgpa'){
+      students = quickSort([...students], (a,b)=> b.cgpa - a.cgpa);
+      activityQueue.enqueue('🔽 Sorted by CGPA using Quick Sort');
+    } else if(mode==='name'){
+      students = mergeSort([...students], (a,b)=> a.name.localeCompare(b.name));
+      activityQueue.enqueue('🔽 Sorted by Name using Merge Sort');
+    }
+    rebuildAll();
+    opsCount++;
+    renderAll();
+  });
+});
+
+document.getElementById('btnUndo').addEventListener('click', undoLast);
+
+/* ======================== PYTHON CODE TABS ======================== */
+const pyFiles = {
+linked_list: `"""
+Linked List implementation for storing Student records.
+Each student is stored as a node, allowing O(1) insertion at the
+tail and O(n) traversal/search without needing contiguous memory.
+"""
+
+class Student:
+    def __init__(self, roll, name, dept, year, cgpa, email=""):
+        self.roll = roll
+        self.name = name
+        self.dept = dept
+        self.year = year
+        self.cgpa = cgpa
+        self.email = email
+
+    def __repr__(self):
+        return f"[{self.roll}] {self.name} - {self.dept} (CGPA: {self.cgpa})"
+
+
+class Node:
+    def __init__(self, student: Student):
+        self.student = student
+        self.next = None
+
+
+class StudentLinkedList:
+    """Singly linked list holding all student records in insertion order."""
+
+    def __init__(self):
+        self.head = None
+        self.size = 0
+
+    def append(self, student: Student):
+        new_node = Node(student)
+        if not self.head:
+            self.head = new_node
+        else:
+            curr = self.head
+            while curr.next:
+                curr = curr.next
+            curr.next = new_node
+        self.size += 1
+
+    def remove(self, roll):
+        curr, prev = self.head, None
+        while curr:
+            if curr.student.roll == roll:
+                if prev:
+                    prev.next = curr.next
+                else:
+                    self.head = curr.next
+                self.size -= 1
+                return curr.student
+            prev, curr = curr, curr.next
+        return None
+
+    def find(self, roll):
+        curr = self.head
+        while curr:
+            if curr.student.roll == roll:
+                return curr.student
+            curr = curr.next
+        return None
+
+    def to_list(self):
+        result, curr = [], self.head
+        while curr:
+            result.append(curr.student)
+            curr = curr.next
+        return result
+
+    def __len__(self):
+        return self.size
+`,
+
+hash_table: `"""
+Hash Table implementation used to look up a student by roll number
+in average O(1) time, using separate chaining to resolve collisions.
+"""
+
+class HashTable:
+    def __init__(self, capacity=10):
+        self.capacity = capacity
+        self.buckets = [[] for _ in range(capacity)]
+
+    def _hash(self, key):
+        return key % self.capacity
+
+    def set(self, roll, student):
+        index = self._hash(roll)
+        bucket = self.buckets[index]
+        for i, (k, _) in enumerate(bucket):
+            if k == roll:
+                bucket[i] = (roll, student)
+                return
+        bucket.append((roll, student))
+
+    def get(self, roll):
+        index = self._hash(roll)
+        for k, student in self.buckets[index]:
+            if k == roll:
+                return student
+        return None
+
+    def remove(self, roll):
+        index = self._hash(roll)
+        bucket = self.buckets[index]
+        for i, (k, _) in enumerate(bucket):
+            if k == roll:
+                return bucket.pop(i)[1]
+        return None
+
+    def display(self):
+        for i, bucket in enumerate(self.buckets):
+            print(f"Bucket {i}: {bucket}")
+`,
+
+bst: `"""
+Binary Search Tree keyed on roll number. Enables sorted (in-order)
+retrieval of all students and fast range queries in O(log n) average time.
+"""
+
+class BSTNode:
+    def __init__(self, roll, student):
+        self.roll = roll
+        self.student = student
+        self.left = None
+        self.right = None
+
+
+class StudentBST:
+    def __init__(self):
+        self.root = None
+
+    def insert(self, roll, student):
+        self.root = self._insert(self.root, roll, student)
+
+    def _insert(self, node, roll, student):
+        if node is None:
+            return BSTNode(roll, student)
+        if roll < node.roll:
+            node.left = self._insert(node.left, roll, student)
+        elif roll > node.roll:
+            node.right = self._insert(node.right, roll, student)
+        else:
+            node.student = student  # update existing
+        return node
+
+    def search(self, roll):
+        node = self.root
+        while node:
+            if roll == node.roll:
+                return node.student
+            node = node.left if roll < node.roll else node.right
+        return None
+
+    def inorder(self):
+        result = []
+        self._inorder(self.root, result)
+        return result
+
+    def _inorder(self, node, result):
+        if node:
+            self._inorder(node.left, result)
+            result.append(node.student)
+            self._inorder(node.right, result)
+`,
+
+stack_queue: `"""
+Stack -> used to undo the last add/delete operation (LIFO)
+Queue -> used to keep a chronological activity log (FIFO)
+"""
+from collections import deque
+
+class UndoStack:
+    def __init__(self):
+        self._items = []
+
+    def push(self, action):
+        self._items.append(action)
+
+    def pop(self):
+        return self._items.pop() if self._items else None
+
+    def is_empty(self):
+        return len(self._items) == 0
+
+
+class ActivityQueue:
+    def __init__(self, max_len=50):
+        self._items = deque(maxlen=max_len)
+
+    def enqueue(self, message):
+        self._items.append(message)
+
+    def dequeue(self):
+        return self._items.popleft() if self._items else None
+
+    def recent(self, n=10):
+        return list(self._items)[-n:]
+`,
+
+main: `"""
+Student Management System - Driver Program
+Combines Linked List, Hash Table, BST, Stack and Queue
+to manage student records through a simple CLI menu.
+"""
+from linked_list import Student, StudentLinkedList
+from hash_table import HashTable
+from bst import StudentBST
+from stack_queue import UndoStack, ActivityQueue
+
+
+class StudentManagementSystem:
+    def __init__(self):
+        self.records = StudentLinkedList()   # master storage
+        self.index = HashTable()              # O(1) lookup by roll
+        self.tree = StudentBST()              # sorted access
+        self.undo_stack = UndoStack()
+        self.log = ActivityQueue()
+
+    def add_student(self, roll, name, dept, year, cgpa, email=""):
+        if self.index.get(roll):
+            print(f"Roll number {roll} already exists!")
+            return
+        student = Student(roll, name, dept, year, cgpa, email)
+        self.records.append(student)
+        self.index.set(roll, student)
+        self.tree.insert(roll, student)
+        self.undo_stack.push(("add", roll))
+        self.log.enqueue(f"Added {name} (Roll {roll})")
+        print(f"Added: {student}")
+
+    def delete_student(self, roll):
+        student = self.records.remove(roll)
+        if student:
+            self.index.remove(roll)
+            self.undo_stack.push(("delete", student))
+            self.log.enqueue(f"Deleted {student.name} (Roll {roll})")
+            print(f"Deleted: {student}")
+        else:
+            print("Student not found.")
+
+    def search_by_roll(self, roll):
+        student = self.index.get(roll)  # O(1) average
+        print(student if student else "Not found")
+        return student
+
+    def sorted_by_roll(self):
+        return self.tree.inorder()
+
+    def undo(self):
+        action = self.undo_stack.pop()
+        if not action:
+            print("Nothing to undo.")
+            return
+        kind, payload = action
+        if kind == "add":
+            self.delete_student(payload)
+        elif kind == "delete":
+            self.add_student(payload.roll, payload.name, payload.dept,
+                              payload.year, payload.cgpa, payload.email)
+
+    def show_all(self):
+        for student in self.records.to_list():
+            print(student)
+
+    def recent_activity(self):
+        for entry in self.log.recent():
+            print(entry)
+
+
+def menu():
+    sms = StudentManagementSystem()
+    options = """
+    1. Add Student         4. Sorted by Roll (BST)
+    2. Delete Student      5. Undo Last Action
+    3. Search by Roll      6. Show Activity Log
+    7. Show All Students   0. Exit
+    """
+    while True:
+        print(options)
+        choice = input("Choose an option: ")
+        if choice == "1":
+            roll = int(input("Roll: "))
+            name = input("Name: ")
+            dept = input("Dept: ")
+            year = int(input("Year: "))
+            cgpa = float(input("CGPA: "))
+            sms.add_student(roll, name, dept, year, cgpa)
+        elif choice == "2":
+            sms.delete_student(int(input("Roll to delete: ")))
+        elif choice == "3":
+            sms.search_by_roll(int(input("Roll to search: ")))
+        elif choice == "4":
+            for s in sms.sorted_by_roll():
+                print(s)
+        elif choice == "5":
+            sms.undo()
+        elif choice == "6":
+            sms.recent_activity()
+        elif choice == "7":
+            sms.show_all()
+        elif choice == "0":
+            break
+        else:
+            print("Invalid option")
+
+
+if __name__ == "__main__":
+    menu()
+`
+};
+
+let activeTab = 'linked_list';
+function renderCode(){
+  const el = document.getElementById('codeBlock');
+  el.textContent = pyFiles[activeTab];
+  Prism.highlightElement(el);
+}
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    activeTab = btn.dataset.tab;
+    renderCode();
+  });
+});
+
+document.getElementById('btnCopy').addEventListener('click', ()=>{
+  navigator.clipboard.writeText(pyFiles[activeTab]).then(()=>{
+    const btn = document.getElementById('btnCopy');
+    const old = btn.textContent;
+    btn.textContent = '✅ Copied!';
+    setTimeout(()=>btn.textContent=old, 1500);
+  });
+});
+
+document.getElementById('btnDownload').addEventListener('click', ()=>{
+  const combined = Object.entries(pyFiles).map(([name,code])=>`# ======== ${name}.py ========\n${code}`).join('\n\n');
+  const blob = new Blob([combined], {type:'text/x-python'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'student_management_system.py';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+});
+
+/* ======================== INIT ======================== */
+renderAll();
+renderCode();
+</script>
+</body>
+</html>
